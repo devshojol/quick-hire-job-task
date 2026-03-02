@@ -7,13 +7,13 @@ import {
 
 export const listJobs = async (req, res) => {
   try {
-    const { category, location, search } = req.query;
+    const { category, location, search, jobType } = req.query;
 
     const filters = {};
     if (category) filters.category = category;
-    if (location) filters.location = location;
+    if (jobType) filters.jobType = jobType;
 
-    const jobs = await getJobsService(filters, { search });
+    const jobs = await getJobsService(filters, { search, location });
     return res.json({
       success: true,
       data: jobs,

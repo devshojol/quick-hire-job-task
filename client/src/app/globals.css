@@ -1,1 +1,39 @@
 @import "tailwindcss";
+
+@theme {
+  --color-primary: #4640de;
+  --color-secondary: #d6ddeb;
+  --color-spacialText: #26a4ff;
+  --color-dark: #202430;
+  --font-sans: var(--font-epilogue);
+}
+
+@utility clip-bevel {
+  clip-path: polygon(100% 0, 100% 75%, 75% 100%, 0 100%, 0 0);
+}
+
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color;
+  transition-duration: 150ms;
+}
+
+/* Line clamp utilities */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
