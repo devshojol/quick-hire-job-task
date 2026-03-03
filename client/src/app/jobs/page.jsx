@@ -70,8 +70,10 @@ export default function JobsPage() {
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const cat = params.get("category");
+      const loc = params.get("location");
       const q = params.get("search");
       if (cat) setCategory(cat);
+      if (loc) setLocation(loc);
       if (q) setSearch(q);
     }
   }, []);

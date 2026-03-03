@@ -5,6 +5,7 @@ import Link from "next/link";
 import { HiOutlineArrowRight, HiOutlineMapPin } from "react-icons/hi2";
 import TagBadge from "../common/TagBadge";
 import { fetchJobs } from "@/src/lib/api";
+import Image from "next/image";
 
 const JOB_TYPE_COLORS = {
   "Full-time": { bg: "#E8F9F2", text: "#0BA02C" },
@@ -14,15 +15,24 @@ const JOB_TYPE_COLORS = {
 };
 
 const LOGO_COLORS = [
-  "#4640DE", "#26A4FF", "#FF6550", "#0BA02C",
-  "#FFB836", "#7A0ECC", "#E05151", "#47C1BF",
+  "#4640DE",
+  "#26A4FF",
+  "#FF6550",
+  "#0BA02C",
+  "#FFB836",
+  "#7A0ECC",
+  "#E05151",
+  "#47C1BF",
 ];
 
 const getInitials = (name = "") => name.slice(0, 2).toUpperCase();
 
 const LatestJobItem = ({ job, index }) => {
   const color = LOGO_COLORS[index % LOGO_COLORS.length];
-  const typeColor = JOB_TYPE_COLORS[job.jobType] || { bg: "#E8F9F2", text: "#0BA02C" };
+  const typeColor = JOB_TYPE_COLORS[job.jobType] || {
+    bg: "#E8F9F2",
+    text: "#0BA02C",
+  };
 
   return (
     <Link
@@ -34,9 +44,11 @@ const LatestJobItem = ({ job, index }) => {
         style={{ backgroundColor: job.companyLogo ? "transparent" : color }}
       >
         {job.companyLogo ? (
-          <img
+          <Image
             src={job.companyLogo}
             alt={job.company}
+            width="64"
+            height="64"
             className="w-full h-full object-contain"
           />
         ) : (
