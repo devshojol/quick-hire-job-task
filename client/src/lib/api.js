@@ -1,8 +1,13 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API_URL =
+  process.env.NODE_ENV === "development"
+    ? "https://quickhire-green.vercel.app"
+    : "http://localhost:8888";
 
 export const fetchJobs = async (params = {}) => {
   const cleanParams = Object.fromEntries(
-    Object.entries(params).filter(([, v]) => v !== "" && v !== undefined && v !== null)
+    Object.entries(params).filter(
+      ([, v]) => v !== "" && v !== undefined && v !== null,
+    ),
   );
   const query = new URLSearchParams(cleanParams).toString();
   const url = `${API_URL}/api/jobs${query ? `?${query}` : ""}`;
@@ -31,7 +36,8 @@ export const createJob = async (jobData) => {
     body: JSON.stringify(jobData),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || data.message || "Failed to create job");
+  if (!res.ok)
+    throw new Error(data.error || data.message || "Failed to create job");
   return data;
 };
 
@@ -49,6 +55,9 @@ export const submitApplication = async (applicationData) => {
     body: JSON.stringify(applicationData),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || data.message || "Failed to submit application");
+  if (!res.ok)
+    throw new Error(
+      data.error || data.message || "Failed to submit application",
+    );
   return data;
 };

@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "postbuild": "node scripts/copy-to-server.js",
     "start": "next start",
     "lint": "eslint"
   },

@@ -9,7 +9,18 @@ import apiRouter from "./src/routes/index.js";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+const corsOptions = {
+  origin: [
+    "http://localhost:3000",
+    "http://192.168.1.21:3000",
+    "https://quick-hire-gray.vercel.app",
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json());
 if (process.env.NODE_ENV !== "test") app.use(morgan("dev"));
 
@@ -41,7 +52,7 @@ app.get("*", (req, res) => {
 const start = async () => {
   try {
     await connectDB();
-    const port = process.env.PORT || 5000;
+    const port = process.env.PORT || 8888;
     app.listen(port, () => {
       console.log(`Server running on port ${port}`);
     });
