@@ -1,21 +1,10 @@
 "use client";
 
-import { HiOutlineAdjustmentsHorizontal, HiOutlineChevronDown, HiOutlineXMark } from "react-icons/hi2";
-
-interface MobileFiltersProps {
-  isOpen: boolean;
-  onToggle: () => void;
-  category: string;
-  jobType: string;
-  categories: string[];
-  jobTypes: string[];
-  onCategoryChange: (value: string) => void;
-  onJobTypeChange: (value: string) => void;
-  onApply: () => void;
-  onClearAll: () => void;
-  activeFilterCount: number;
-  hasActiveFilters: boolean;
-}
+import {
+  HiOutlineAdjustmentsHorizontal,
+  HiOutlineChevronDown,
+  HiOutlineXMark,
+} from "react-icons/hi2";
 
 export default function MobileFilters({
   isOpen,
@@ -30,7 +19,7 @@ export default function MobileFilters({
   onClearAll,
   activeFilterCount,
   hasActiveFilters,
-}: MobileFiltersProps) {
+}) {
   return (
     <div className="lg:hidden mb-4">
       <div className="flex items-center gap-3">
@@ -64,7 +53,7 @@ export default function MobileFilters({
 
       <div
         className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen ? "max-h-[600px] mt-3" : "max-h-0"
+          isOpen ? "max-h-96 mt-3" : "max-h-0"
         }`}
       >
         <div className="bg-white border border-[#D6DDEB] p-4 space-y-5">

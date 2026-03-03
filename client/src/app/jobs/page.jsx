@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-import Navbar from "../../components/common/Navbar";
+import { useCallback, useEffect, useState } from "react";
 import Footer from "../../components/common/Footer";
-import JobsHeader from "../../components/jobs/JobsHeader";
-import SearchBar from "../../components/jobs/SearchBar";
-import FilterSidebar from "../../components/jobs/FilterSidebar";
-import MobileFilters from "../../components/jobs/MobileFilters";
+import Navbar from "../../components/common/Navbar";
 import ActiveFilters from "../../components/jobs/ActiveFilters";
+import FilterSidebar from "../../components/jobs/FilterSidebar";
 import JobsGrid from "../../components/jobs/JobsGrid";
+import JobsHeader from "../../components/jobs/JobsHeader";
+import MobileFilters from "../../components/jobs/MobileFilters";
+import SearchBar from "../../components/jobs/SearchBar";
 import { fetchJobs } from "../../lib/api";
 
 const CATEGORIES = [
@@ -24,7 +24,7 @@ const CATEGORIES = [
 
 const JOB_TYPES = ["Full-time", "Part-time", "Contract", "Internship"];
 
-const JOB_TYPE_COLORS: Record<string, { bg: string; text: string }> = {
+const JOB_TYPE_COLORS = {
   "Full-time": { bg: "#E8F9F2", text: "#0BA02C" },
   "Part-time": { bg: "#FFF1F0", text: "#FF6550" },
   Contract: { bg: "#FFF6E6", text: "#FFB836" },
@@ -42,15 +42,11 @@ const LOGO_COLORS = [
   "#47C1BF",
 ];
 
-const hasActiveFilters = (
-  category: string,
-  jobType: string,
-  location: string,
-  search: string,
-) => !!(category || jobType || location || search);
+const hasActiveFilters = (category, jobType, location, search) =>
+  !!(category || jobType || location || search);
 
 export default function JobsPage() {
-  const [jobs, setJobs] = useState<any[]>([]);
+  const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
@@ -125,7 +121,12 @@ export default function JobsPage() {
           onApply={() => setMobileFilterOpen(false)}
           onClearAll={clearAll}
           activeFilterCount={activeFilterCount}
-          hasActiveFilters={hasActiveFilters(category, jobType, location, search)}
+          hasActiveFilters={hasActiveFilters(
+            category,
+            jobType,
+            location,
+            search,
+          )}
         />
 
         <ActiveFilters
@@ -137,7 +138,12 @@ export default function JobsPage() {
           onJobTypeRemove={() => setJobType("")}
           onLocationRemove={() => setLocation("")}
           onSearchRemove={() => setSearch("")}
-          hasActiveFilters={hasActiveFilters(category, jobType, location, search)}
+          hasActiveFilters={hasActiveFilters(
+            category,
+            jobType,
+            location,
+            search,
+          )}
         />
 
         <div className="flex gap-6">
@@ -150,7 +156,12 @@ export default function JobsPage() {
               onCategoryChange={setCategory}
               onJobTypeChange={setJobType}
               onClearAll={clearAll}
-              hasActiveFilters={hasActiveFilters(category, jobType, location, search)}
+              hasActiveFilters={hasActiveFilters(
+                category,
+                jobType,
+                location,
+                search,
+              )}
             />
           </aside>
 
@@ -161,7 +172,12 @@ export default function JobsPage() {
               logoColors={LOGO_COLORS}
               jobTypeColors={JOB_TYPE_COLORS}
               onClearAll={clearAll}
-              hasActiveFilters={hasActiveFilters(category, jobType, location, search)}
+              hasActiveFilters={hasActiveFilters(
+                category,
+                jobType,
+                location,
+                search,
+              )}
             />
           </div>
         </div>

@@ -1,16 +1,5 @@
 "use client";
 
-interface FilterSidebarProps {
-  category: string;
-  jobType: string;
-  categories: string[];
-  jobTypes: string[];
-  onCategoryChange: (value: string) => void;
-  onJobTypeChange: (value: string) => void;
-  onClearAll: () => void;
-  hasActiveFilters: boolean;
-}
-
 export default function FilterSidebar({
   category,
   jobType,
@@ -20,7 +9,7 @@ export default function FilterSidebar({
   onJobTypeChange,
   onClearAll,
   hasActiveFilters,
-}: FilterSidebarProps) {
+}) {
   return (
     <div className="space-y-4">
       <div className="bg-white border border-[#D6DDEB] p-5">

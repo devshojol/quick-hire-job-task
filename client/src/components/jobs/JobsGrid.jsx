@@ -2,15 +2,6 @@
 
 import JobCard from "./JobCard";
 
-interface JobsGridProps {
-  jobs: any[];
-  loading: boolean;
-  logoColors: string[];
-  jobTypeColors: Record<string, { bg: string; text: string }>;
-  onClearAll: () => void;
-  hasActiveFilters: boolean;
-}
-
 export default function JobsGrid({
   jobs,
   loading,
@@ -18,7 +9,7 @@ export default function JobsGrid({
   jobTypeColors,
   onClearAll,
   hasActiveFilters,
-}: JobsGridProps) {
+}) {
   if (loading) {
     return (
       <div className="space-y-4">
@@ -60,13 +51,20 @@ export default function JobsGrid({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      {jobs.map((job: any, index: number) => {
+      {jobs.map((job, index) => {
         const color = logoColors[index % logoColors.length];
-        const typeColor = jobTypeColors[job.jobType as string] || {
+        const typeColor = jobTypeColors[job.jobType] || {
           bg: "#E8F9F2",
           text: "#0BA02C",
         };
-        return <JobCard key={job._id} job={job} logoColor={color} typeColor={typeColor} />;
+        return (
+          <JobCard
+            key={job._id}
+            job={job}
+            logoColor={color}
+            typeColor={typeColor}
+          />
+        );
       })}
     </div>
   );

@@ -1,18 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { HiOutlineArrowRight, HiOutlineMapPin } from "react-icons/hi2";
 import TagBadge from "../common/TagBadge";
-import { HiOutlineMapPin, HiOutlineArrowRight } from "react-icons/hi2";
-
-interface JobCardProps {
-  job: any;
-  logoColor: string;
-  typeColor: { bg: string; text: string };
-}
 
 const getInitials = (name = "") => name.slice(0, 2).toUpperCase();
 
-export default function JobCard({ job, logoColor, typeColor }: JobCardProps) {
+export default function JobCard({ job, logoColor, typeColor }) {
   return (
     <Link
       href={`/jobs/${job._id}`}
@@ -65,7 +59,7 @@ export default function JobCard({ job, logoColor, typeColor }: JobCardProps) {
           {(job.tags?.length ? job.tags : [job.category])
             .filter(Boolean)
             .slice(0, 4)
-            .map((tag: string) => (
+            .map((tag) => (
               <TagBadge key={tag} tag={tag} small />
             ))}
         </div>

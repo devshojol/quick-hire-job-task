@@ -2,18 +2,6 @@
 
 import { HiOutlineXMark } from "react-icons/hi2";
 
-interface ActiveFiltersProps {
-  category: string;
-  jobType: string;
-  location: string;
-  search: string;
-  onCategoryRemove: () => void;
-  onJobTypeRemove: () => void;
-  onLocationRemove: () => void;
-  onSearchRemove: () => void;
-  hasActiveFilters: boolean;
-}
-
 export default function ActiveFilters({
   category,
   jobType,
@@ -24,7 +12,7 @@ export default function ActiveFilters({
   onLocationRemove,
   onSearchRemove,
   hasActiveFilters,
-}: ActiveFiltersProps) {
+}) {
   if (!hasActiveFilters) return null;
 
   return (
@@ -56,7 +44,7 @@ export default function ActiveFilters({
       )}
       {search && (
         <span className="flex items-center gap-1.5 bg-primary/10 text-primary text-xs font-semibold px-3 py-1 rounded-full">
-          "{search}"
+          &quot;{search}&quot;
           <button onClick={onSearchRemove} className="hover:text-indigo-800">
             <HiOutlineXMark size={12} />
           </button>

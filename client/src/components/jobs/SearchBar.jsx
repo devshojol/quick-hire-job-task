@@ -1,14 +1,10 @@
 "use client";
 
-import { HiOutlineMagnifyingGlass, HiOutlineMapPin, HiOutlineXMark } from "react-icons/hi2";
-
-interface SearchBarProps {
-  search: string;
-  location: string;
-  onSearchChange: (value: string) => void;
-  onLocationChange: (value: string) => void;
-  onSearch: () => void;
-}
+import {
+  HiOutlineMagnifyingGlass,
+  HiOutlineMapPin,
+  HiOutlineXMark,
+} from "react-icons/hi2";
 
 export default function SearchBar({
   search,
@@ -16,11 +12,14 @@ export default function SearchBar({
   onSearchChange,
   onLocationChange,
   onSearch,
-}: SearchBarProps) {
+}) {
   return (
     <div className="bg-white border border-[#D6DDEB] p-3 md:p-4 mb-6 flex flex-col sm:flex-row gap-3">
       <div className="flex items-center gap-3 flex-1 border-b sm:border-b-0 sm:border-r border-[#D6DDEB] pb-3 sm:pb-0 sm:pr-4">
-        <HiOutlineMagnifyingGlass className="text-gray-400 shrink-0" size={20} />
+        <HiOutlineMagnifyingGlass
+          className="text-gray-400 shrink-0"
+          size={20}
+        />
         <input
           type="text"
           placeholder="Job title, keyword..."

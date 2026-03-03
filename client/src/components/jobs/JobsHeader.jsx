@@ -1,11 +1,6 @@
 "use client";
 
-interface JobsHeaderProps {
-  jobsCount: number;
-  isLoading: boolean;
-}
-
-export default function JobsHeader({ jobsCount, isLoading }: JobsHeaderProps) {
+export default function JobsHeader({ jobsCount, isLoading }) {
   return (
     <div className="bg-white border-b border-[#D6DDEB] py-8 md:py-10">
       <div className="container mx-auto px-4">
