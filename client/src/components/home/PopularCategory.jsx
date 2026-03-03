@@ -4,7 +4,7 @@ const popularTags = ["UI Designer", "UX Researcher", "Android", "Admin"];
 
 const PopularCategory = () => {
   return (
-    <div className="mt-5 text-[#202430] text-sm flex flex-wrap items-center gap-1">
+    <div className="mt-5 text-dark text-sm flex flex-wrap items-center gap-1">
       <span className="text-gray-500">Popular:</span>
       {popularTags.map((tag, index) => (
         <span key={tag}>
