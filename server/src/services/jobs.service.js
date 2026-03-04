@@ -46,3 +46,42 @@ export const getJobByIdService = (id) => {
 export const deleteJobByIdService = (id) => {
   return Job.findByIdAndDelete(id);
 };
+export const getJobStatsService = async () => {
+  const [
+    total,
+    active,
+    inactive,
+    byType,
+    byCategory,
+    recentJobs,
+    totalApplications,
+  ] = await Promise.all([
+    Job.countDocuments(),
+    Job.countDocuments({ isActive: true }),
+    Job.countDocuments({ isActive: false }),
+    Job.aggregate([
+      { $group: { _id: "$jobType", count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+    ]),
+    Job.aggregate([
+      { $group: { _id: "$category", count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+      { $limit: 5 },
+    ]),
+    Job.find({ isActive: true })
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .select("title company jobType createdAt"),
+    Application.countDocuments(),
+  ]);
+
+  return {
+    total,
+    active,
+    inactive,
+    totalApplications,
+    byType: byType.map((t) => ({ type: t._id, count: t.count })),
+    byCategory: byCategory.map((c) => ({ category: c._id, count: c.count })),
+    recentJobs,
+  };
+};

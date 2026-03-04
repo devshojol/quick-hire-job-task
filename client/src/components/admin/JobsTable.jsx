@@ -5,6 +5,8 @@ import {
   HiOutlineBriefcase,
   HiOutlineEye,
   HiOutlineTrash,
+  HiChevronLeft,
+  HiChevronRight,
 } from "react-icons/hi2";
 import TagBadge from "../common/TagBadge";
 
@@ -17,6 +19,22 @@ const JOB_TYPE_COLORS = {
 
 const getInitials = (name = "") => name.slice(0, 2).toUpperCase();
 
+function getPageNumbers(current, total) {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const pages = [1];
+  if (current > 3) pages.push("...");
+  for (
+    let i = Math.max(2, current - 1);
+    i <= Math.min(total - 1, current + 1);
+    i++
+  ) {
+    pages.push(i);
+  }
+  if (current < total - 2) pages.push("...");
+  pages.push(total);
+  return pages;
+}
+
 function JobRow({ job, onDeleteClick }) {
   const typeColor = JOB_TYPE_COLORS[job.jobType] || {
     bg: "#E8F9F2",
@@ -27,7 +45,7 @@ function JobRow({ job, onDeleteClick }) {
     <tr className="hover:bg-[#F8F8FD] transition-colors">
       <td className="px-4 py-3">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded shrink-0 flex items-center justify-center text-white font-bold text-xs overflow-hidden">
+          <div className="w-8 h-8 rounded shrink-0 flex items-center justify-center text-white font-bold text-xs overflow-hidden bg-primary/10">
             {job.companyLogo ? (
               <img
                 src={job.companyLogo}
@@ -35,7 +53,7 @@ function JobRow({ job, onDeleteClick }) {
                 className="w-full h-full object-contain"
               />
             ) : (
-              getInitials(job.company)
+              <span className="text-primary">{getInitials(job.company)}</span>
             )}
           </div>
           <div>
@@ -44,7 +62,7 @@ function JobRow({ job, onDeleteClick }) {
           </div>
         </div>
       </td>
-      <td className="px-4 py-3 text-gray-500 hidden md:table-cell">
+      <td className="px-4 py-3 text-gray-500 text-sm hidden md:table-cell">
         {job.location}
       </td>
       <td className="px-4 py-3 hidden lg:table-cell">
@@ -91,11 +109,83 @@ function JobRow({ job, onDeleteClick }) {
   );
 }
 
+function TablePagination({
+  currentPage,
+  totalPages,
+  onPageChange,
+  total,
+  limit,
+}) {
+  if (totalPages <= 1) return null;
+  const pages = getPageNumbers(currentPage, totalPages);
+  const from = (currentPage - 1) * limit + 1;
+  const to = Math.min(currentPage * limit, total);
+
+  return (
+    <div className="px-4 py-3 border-t border-[#D6DDEB] flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p className="text-xs text-gray-400">
+        Showing{" "}
+        <span className="font-semibold text-[#25324B]">
+          {from}–{to}
+        </span>{" "}
+        of <span className="font-semibold text-[#25324B]">{total}</span> jobs
+      </p>
+      <div className="flex items-center gap-1">
+        <button
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="flex items-center gap-1 px-2.5 py-1.5 border border-[#D6DDEB] text-xs font-medium text-[#25324B] hover:border-primary hover:text-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          <HiChevronLeft size={14} />
+          Prev
+        </button>
+
+        {pages.map((p, i) =>
+          p === "..." ? (
+            <span
+              key={`e-${i}`}
+              className="w-8 h-8 flex items-center justify-center text-gray-400 text-xs"
+            >
+              …
+            </span>
+          ) : (
+            <button
+              key={p}
+              onClick={() => onPageChange(p)}
+              className={`w-8 h-8 text-xs font-medium border transition-colors ${
+                p === currentPage
+                  ? "bg-primary text-white border-primary"
+                  : "border-[#D6DDEB] text-[#25324B] hover:border-primary hover:text-primary"
+              }`}
+            >
+              {p}
+            </button>
+          ),
+        )}
+
+        <button
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="flex items-center gap-1 px-2.5 py-1.5 border border-[#D6DDEB] text-xs font-medium text-[#25324B] hover:border-primary hover:text-primary transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+          Next
+          <HiChevronRight size={14} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function JobsTable({
   jobs,
   loading,
   onDeleteClick,
   onAddJobClick,
+  currentPage,
+  totalPages,
+  total,
+  limit,
+  onPageChange,
 }) {
   return (
     <div className="bg-white border border-[#D6DDEB]">
@@ -104,13 +194,15 @@ export default function JobsTable({
           <HiOutlineBriefcase className="text-primary" size={20} />
           <h2 className="font-bold text-[#25324B]">All Job Listings</h2>
         </div>
-        <span className="text-sm text-gray-400">{jobs.length} total</span>
+        <span className="text-sm text-gray-400">
+          {total ?? jobs.length} total
+        </span>
       </div>
 
       {loading ? (
         <div className="p-10">
           <div className="animate-pulse space-y-3">
-            {Array.from({ length: 4 }).map((_, i) => (
+            {Array.from({ length: 5 }).map((_, i) => (
               <div key={i} className="h-12 bg-gray-100 rounded" />
             ))}
           </div>
@@ -130,42 +222,50 @@ export default function JobsTable({
           </button>
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-[#F8F8FD] border-b border-[#D6DDEB]">
-              <tr>
-                <th className="text-left px-4 py-3 text-[#515B6F] font-semibold">
-                  Job
-                </th>
-                <th className="text-left px-4 py-3 text-[#515B6F] font-semibold hidden md:table-cell">
-                  Location
-                </th>
-                <th className="text-left px-4 py-3 text-[#515B6F] font-semibold hidden lg:table-cell">
-                  Category
-                </th>
-                <th className="text-left px-4 py-3 text-[#515B6F] font-semibold">
-                  Type
-                </th>
-                <th className="text-left px-4 py-3 text-[#515B6F] font-semibold hidden lg:table-cell">
-                  Status
-                </th>
-                <th className="text-right px-4 py-3 text-[#515B6F] font-semibold">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-[#F0F0F5]">
-              {jobs.map((job, index) => (
-                <JobRow
-                  key={job._id}
-                  job={job}
-                  index={index}
-                  onDeleteClick={onDeleteClick}
-                />
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-[#F8F8FD] border-b border-[#D6DDEB]">
+                <tr>
+                  <th className="text-left px-4 py-3 text-[#515B6F] font-semibold">
+                    Job
+                  </th>
+                  <th className="text-left px-4 py-3 text-[#515B6F] font-semibold hidden md:table-cell">
+                    Location
+                  </th>
+                  <th className="text-left px-4 py-3 text-[#515B6F] font-semibold hidden lg:table-cell">
+                    Category
+                  </th>
+                  <th className="text-left px-4 py-3 text-[#515B6F] font-semibold">
+                    Type
+                  </th>
+                  <th className="text-left px-4 py-3 text-[#515B6F] font-semibold hidden lg:table-cell">
+                    Status
+                  </th>
+                  <th className="text-right px-4 py-3 text-[#515B6F] font-semibold">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#F0F0F5]">
+                {jobs.map((job) => (
+                  <JobRow
+                    key={job._id}
+                    job={job}
+                    onDeleteClick={onDeleteClick}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <TablePagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={onPageChange}
+            total={total}
+            limit={limit}
+          />
+        </>
       )}
     </div>
   );

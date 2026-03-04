@@ -29,6 +29,16 @@ export const fetchJob = async (id) => {
   }
 };
 
+export const fetchJobStats = async () => {
+  try {
+    const res = await fetch(`${API_URL}/api/jobs/stats`);
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+};
+
 export const createJob = async (jobData) => {
   const res = await fetch(`${API_URL}/api/jobs`, {
     method: "POST",

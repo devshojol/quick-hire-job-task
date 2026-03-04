@@ -3,6 +3,7 @@ import {
   deleteJobByIdService,
   getJobByIdService,
   getJobsService,
+  getJobStatsService,
 } from "../services/jobs.service.js";
 
 export const listJobs = async (req, res) => {
@@ -46,7 +47,19 @@ export const listJobs = async (req, res) => {
     });
   }
 };
-
+export const getJobStats = async (req, res) => {
+  try {
+    const stats = await getJobStatsService();
+    return res.json({ success: true, data: stats });
+  } catch (err) {
+    console.error("getJobStats error", err);
+    return res.status(500).json({
+      success: false,
+      error: "Failed to fetch stats",
+      details: err?.message,
+    });
+  }
+};
 export const getJob = async (req, res) => {
   try {
     console.log(req.params.id);
