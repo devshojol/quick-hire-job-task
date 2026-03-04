@@ -33,7 +33,6 @@ export default function LocationSearch({
         city.toLowerCase().includes(value.toLowerCase()),
     )
     .slice(0, 50);
-
   const handleSelect = ({ country, city }) => {
     onChange(`${city}, ${country}`);
     setDropdownOpen(false);
@@ -71,9 +70,9 @@ export default function LocationSearch({
       {dropdownOpen && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 shadow-lg z-50 max-h-60 overflow-y-auto">
           {filtered.length > 0 ? (
-            filtered.map(({ country, city }) => (
+            filtered.map(({ country, city }, index) => (
               <button
-                key={`${country}-${city}`}
+                key={`${country}-${city}-${index}`}
                 className="w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors"
                 onClick={() => handleSelect({ country, city })}
               >

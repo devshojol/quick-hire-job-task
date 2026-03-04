@@ -7,17 +7,35 @@ import {
 
 export const listJobs = async (req, res) => {
   try {
-    const { category, location, search, jobType } = req.query;
+    const {
+      category,
+      location,
+      search,
+      jobType,
+      page = 1,
+      limit = 9,
+    } = req.query;
 
     const filters = {};
     if (category) filters.category = category;
     if (jobType) filters.jobType = jobType;
 
-    const jobs = await getJobsService(filters, { search, location });
+    const { jobs, total } = await getJobsService(filters, {
+      search,
+      location,
+      page,
+      limit,
+    });
+
     return res.json({
       success: true,
       data: jobs,
-      count: Array.isArray(jobs) ? jobs.length : 0,
+      pagination: {
+        total,
+        page: Number(page),
+        limit: Number(limit),
+        totalPages: Math.ceil(total / Number(limit)),
+      },
     });
   } catch (err) {
     console.error("listJobs error", err);

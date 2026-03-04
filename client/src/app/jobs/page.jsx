@@ -49,6 +49,8 @@ const LOGO_COLORS = [
 export default function JobsPage() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalJobs, setTotalJobs] = useState(0);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [jobType, setJobType] = useState("");
@@ -69,33 +71,31 @@ export default function JobsPage() {
     [category, jobType, location, search],
   );
 
-  const totalPages = useMemo(
-    () => Math.ceil(jobs.length / JOBS_PER_PAGE),
-    [jobs.length],
+  const loadJobs = useCallback(
+    async (currentPage = 1) => {
+      setLoading(true);
+      try {
+        const data = await fetchJobs({
+          search: debouncedSearch,
+          category,
+          location: debouncedLocation,
+          jobType,
+          page: currentPage,
+          limit: JOBS_PER_PAGE,
+        });
+        setJobs(data?.data || []);
+        setTotalPages(data?.pagination?.totalPages ?? 0);
+        setTotalJobs(data?.pagination?.total ?? 0);
+      } catch {
+        setJobs([]);
+        setTotalPages(0);
+        setTotalJobs(0);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [debouncedSearch, category, debouncedLocation, jobType],
   );
-
-  const paginatedJobs = useMemo(
-    () => jobs.slice((page - 1) * JOBS_PER_PAGE, page * JOBS_PER_PAGE),
-    [jobs, page],
-  );
-
-  const loadJobs = useCallback(async () => {
-    setLoading(true);
-    setPage(1);
-    try {
-      const data = await fetchJobs({
-        search: debouncedSearch,
-        category,
-        location: debouncedLocation,
-        jobType,
-      });
-      setJobs(data?.data || []);
-    } catch {
-      setJobs([]);
-    } finally {
-      setLoading(false);
-    }
-  }, [debouncedSearch, category, debouncedLocation, jobType]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -110,8 +110,15 @@ export default function JobsPage() {
   }, []);
 
   useEffect(() => {
-    loadJobs();
+    setPage(1);
+    loadJobs(1);
   }, [loadJobs]);
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+    loadJobs(newPage);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const clearAll = () => {
     setCategory("");
@@ -126,7 +133,7 @@ export default function JobsPage() {
         <Navbar />
       </div>
 
-      <JobsHeader jobsCount={jobs.length} isLoading={loading} />
+      <JobsHeader jobsCount={totalJobs} isLoading={loading} />
 
       <div className="container mx-auto px-4 py-6">
         <SearchBar
@@ -134,7 +141,7 @@ export default function JobsPage() {
           location={location}
           onSearchChange={setSearch}
           onLocationChange={setLocation}
-          onSearch={loadJobs}
+          onSearch={() => loadJobs(1)}
         />
 
         <MobileFilters
@@ -180,7 +187,7 @@ export default function JobsPage() {
 
           <div className="flex-1 min-w-0">
             <JobsGrid
-              jobs={paginatedJobs}
+              jobs={jobs}
               loading={loading}
               logoColors={LOGO_COLORS}
               jobTypeColors={JOB_TYPE_COLORS}
@@ -190,7 +197,7 @@ export default function JobsPage() {
             <Pagination
               currentPage={page}
               totalPages={totalPages}
-              onPageChange={setPage}
+              onPageChange={handlePageChange}
             />
           </div>
         </div>
