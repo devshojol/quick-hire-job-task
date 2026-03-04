@@ -8,9 +8,9 @@ const CTABanner = () => {
       style={{
         clipPath: "polygon(15% 0, 100% 0, 100% 75%, 75% 100%, 0 100%, 0% 15%)",
       }}
-      className="container mx-auto bg-primary px-6 sm:px-12 lg:px-20 lg:flex justify-between h-auto lg:h-125 gap-10"
+      className="container mx-auto bg-primary p-6 sm:px-12 lg:px-20 lg:flex justify-between h-auto lg:h-125 gap-10"
     >
-      <div className="py-8 md:py-12 lg:py-16 flex flex-col justify-center shrink-0">
+      <div className=" lg:py-16 flex flex-col justify-center shrink-0">
         <h2 className="text-2xl text-center lg:text-left md:text-3xl lg:text-5xl font-bold text-white mb-3 leading-tight">
           Start posting
           <br />
@@ -22,7 +22,7 @@ const CTABanner = () => {
         <div>
           <Link
             href="/admin"
-            className="inline-block px-6 py-3 w-full lg:w-auto bg-white text-primary font-semibold hover:bg-gray-100 transition-colors text-sm"
+            className="inline-block px-6 py-3 mb-8 lg:mb-0 w-full lg:w-auto bg-white text-primary font-semibold hover:bg-gray-100 transition-colors text-sm"
           >
             Sign Up For Free
           </Link>
@@ -35,7 +35,7 @@ const CTABanner = () => {
           alt="Dashboard Mockup"
           width={565}
           height={346}
-          className="object-contain"
+          className="object-contain mx-auto w-full"
         />
       </div>
     </section>

@@ -53,7 +53,7 @@ export default function MobileFilters({
 
       <div
         className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen ? "max-h-96 mt-3" : "max-h-0"
+          isOpen ? "max-h-auto mt-3" : "max-h-0"
         }`}
       >
         <div className="bg-white border border-[#D6DDEB] p-4 space-y-5">

@@ -8,7 +8,7 @@ const MobileMenu = () => {
   return (
     <>
       <button
-        className="md:hidden p-1.5 flex flex-col justify-center items-start size-8 gap-1 border rounded-full border-secondary bg-white"
+        className="md:hidden p-1.5 flex flex-col justify-center items-start size-8 gap-1 border rounded-full border-secondary bg-white "
         onClick={() => setOpen((prev) => !prev)}
         aria-label="Toggle menu"
       >

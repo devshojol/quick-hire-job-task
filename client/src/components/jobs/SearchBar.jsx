@@ -34,12 +34,14 @@ export default function SearchBar({
         )}
       </div>
 
-      <div className="flex-1 border-b sm:border-b-0 sm:border-r border-[#D6DDEB] pb-3 sm:pb-0 sm:pr-4">
-        <LocationSearch
-          value={location}
-          onChange={onLocationChange}
-          inputClassName="flex-1 focus:outline-none text-sm text-[#25324B] placeholder-gray-400 min-w-0 w-full pr-6"
-        />
+      <div className="sm:border-b-0  sm:border-r border-[#D6DDEB] flex-1 sm:pl-3">
+        <div className="border-b border-[#D6DDEB] pb-3 sm:mr-4">
+          <LocationSearch
+            value={location}
+            onChange={onLocationChange}
+            inputClassName=" flex-1 focus:outline-none text-sm text-[#25324B] placeholder-gray-400 min-w-0 w-full pr-6"
+          />
+        </div>
       </div>
 
       <button

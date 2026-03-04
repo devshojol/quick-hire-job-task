@@ -1,7 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/src/assets/images/Logo.png";
-import { FiFacebook, FiInstagram, FiTwitter, FiLinkedin, FiYoutube } from "react-icons/fi";
+import {
+  FiFacebook,
+  FiInstagram,
+  FiTwitter,
+  FiLinkedin,
+  FiYoutube,
+} from "react-icons/fi";
 
 const Footer = () => {
   return (
@@ -27,7 +33,13 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-white mb-5">About</h3>
             <ul className="space-y-3 text-gray-400 text-sm">
-              {["Companies", "Pricing", "Terms", "Advice", "Privacy Policy"].map((item) => (
+              {[
+                "Companies",
+                "Pricing",
+                "Terms",
+                "Advice",
+                "Privacy Policy",
+              ].map((item) => (
                 <li key={item}>
                   <Link href="#" className="hover:text-white transition-colors">
                     {item}
@@ -53,7 +65,9 @@ const Footer = () => {
 
           {/* Newsletter */}
           <div>
-            <h3 className="font-semibold text-white mb-2">Get job notifications</h3>
+            <h3 className="font-semibold text-white mb-2">
+              Get job notifications
+            </h3>
             <p className="text-gray-400 text-sm mb-5">
               The latest job news, articles, sent to your inbox weekly.
             </p>
@@ -72,13 +86,21 @@ const Footer = () => {
 
         {/* Bottom bar */}
         <div className="border-t border-gray-700 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-gray-400 text-sm">2021 © QuickHire. All rights reserved.</p>
+          <p className="text-gray-400 text-sm">
+            2026 © QuickHire. All rights reserved.
+          </p>
           <div className="flex items-center gap-4">
-            {[FiFacebook, FiInstagram, FiTwitter, FiLinkedin, FiYoutube].map((Icon, i) => (
-              <Link key={i} href="#" className="text-gray-400 hover:text-white transition-colors p-1">
-                <Icon size={18} />
-              </Link>
-            ))}
+            {[FiFacebook, FiInstagram, FiTwitter, FiLinkedin, FiYoutube].map(
+              (Icon, i) => (
+                <Link
+                  key={i}
+                  href="#"
+                  className="text-gray-400 hover:text-white transition-colors p-1"
+                >
+                  <Icon size={18} />
+                </Link>
+              ),
+            )}
           </div>
         </div>
       </div>

@@ -8,7 +8,6 @@ export default function LocationSearch({
   value,
   onChange,
   inputClassName = "",
-  locationIcon = false,
   placeholder = "Search location",
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -51,8 +50,8 @@ export default function LocationSearch({
   }, []);
 
   return (
-    <div className="flex gap-4 items-end relative" ref={wrapperRef}>
-      {locationIcon && <GrLocation size={24} className="mt-1 shrink-0" />}
+    <div className="flex gap-4  relative" ref={wrapperRef}>
+      <GrLocation size={24} className="mt-1 shrink-0" />
       <input
         type="text"
         placeholder={placeholder}

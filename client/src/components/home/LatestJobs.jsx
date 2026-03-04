@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { fetchJobs } from "@/src/lib/api";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { HiOutlineArrowRight, HiOutlineMapPin } from "react-icons/hi2";
 import TagBadge from "../common/TagBadge";
-import { fetchJobs } from "@/src/lib/api";
-import Image from "next/image";
 
 const JOB_TYPE_COLORS = {
   "Full-time": { bg: "#E8F9F2", text: "#0BA02C" },
@@ -27,9 +26,9 @@ const LatestJobItem = ({ job }) => {
       href={`/jobs/${job._id}`}
       className="flex items-start gap-4 p-4 border border-[#D6DDEB] hover:border-primary hover:shadow-sm transition-all duration-200 bg-white group"
     >
-      <div className="w-12 h-12 rounded shrink-0 flex items-center justify-center bg-[#F0F1F3] text-[#515B6F] font-bold text-sm overflow-hidden">
+      <div className="w-12 h-12 rounded shrink-0 flex items-center justify-center  text-[#515B6F] font-bold text-sm overflow-hidden">
         {job.companyLogo ? (
-          <Image
+          <img
             src={job.companyLogo}
             alt={job.company}
             width="64"
@@ -84,45 +83,48 @@ const LatestJobs = () => {
   }, []);
 
   return (
-    <section className="py-12 md:py-16 container mx-auto px-4">
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold">
-          Latest jobs <span className="text-spacialText">open</span>
-        </h2>
-        <Link
-          href="/jobs"
-          className="text-primary font-semibold flex items-center gap-2 hover:gap-3 transition-all text-sm md:text-base"
-        >
-          Show all jobs <HiOutlineArrowRight />
-        </Link>
-      </div>
-
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div
-              key={i}
-              className="border border-[#D6DDEB] p-4 bg-white animate-pulse flex gap-4"
-            >
-              <div className="w-12 h-12 bg-gray-200 rounded flex-shrink-0" />
-              <div className="flex-1">
-                <div className="h-3 bg-gray-200 rounded mb-2 w-2/3" />
-                <div className="h-3 bg-gray-200 rounded w-1/2" />
+    <section
+      className={`py-12 md:py-16 bg-[#F8F8FD] bg-[url('/latestJobPattern.png')] bg-no-repeat bg-top-right  md:[clip-path:polygon(8%_0,100%_0,100%_100%,0_100%,0_12%)] lg:[clip-path:polygon(10%_0,100%_0,100%_100%,0_100%,0_10%)]`}
+    >
+      <div className="container mx-auto  px-4">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold">
+            Latest jobs <span className="text-spacialText">open</span>
+          </h2>
+          <Link
+            href="/jobs"
+            className="text-primary font-semibold flex items-center gap-2 hover:gap-3 transition-all text-sm md:text-base"
+          >
+            Show all jobs <HiOutlineArrowRight />
+          </Link>
+        </div>
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div
+                key={i}
+                className="border border-[#D6DDEB] p-4 bg-white animate-pulse flex gap-4"
+              >
+                <div className="w-12 h-12 bg-gray-200 rounded flex-shrink-0" />
+                <div className="flex-1">
+                  <div className="h-3 bg-gray-200 rounded mb-2 w-2/3" />
+                  <div className="h-3 bg-gray-200 rounded w-1/2" />
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      ) : jobs.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {jobs.map((job) => (
-            <LatestJobItem key={job._id} job={job} />
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-8 border border-dashed border-[#D6DDEB] bg-white">
-          <p className="text-gray-400">No recent jobs available.</p>
-        </div>
-      )}
+            ))}
+          </div>
+        ) : jobs.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {jobs.map((job) => (
+              <LatestJobItem key={job._id} job={job} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-8 border border-dashed border-[#D6DDEB] bg-white">
+            <p className="text-gray-400">No recent jobs available.</p>
+          </div>
+        )}
+      </div>
     </section>
   );
 };

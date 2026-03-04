@@ -12,13 +12,22 @@
   clip-path: polygon(100% 0, 100% 75%, 75% 100%, 0 100%, 0 0);
 }
 
-/* Smooth transitions */
+@utility scrollbar-hide {
+  /* Firefox */
+  scrollbar-width: none;
+  /* IE and Edge */
+  -ms-overflow-style: none;
+  /* Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 * {
   transition-property: color, background-color, border-color;
   transition-duration: 150ms;
 }
 
-/* Line clamp utilities */
 .line-clamp-1 {
   overflow: hidden;
   display: -webkit-box;
@@ -33,7 +42,6 @@
   -webkit-line-clamp: 2;
 }
 
-/* Smooth scrolling */
 html {
   scroll-behavior: smooth;
 }
