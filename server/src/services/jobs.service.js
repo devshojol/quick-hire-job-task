@@ -1,3 +1,4 @@
+import Application from "../models/applications.model.js";
 import Job from "../models/jobs.model.js";
 
 export const createJobService = (data) => {
