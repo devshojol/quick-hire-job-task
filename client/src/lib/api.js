@@ -1,7 +1,9 @@
-const API_URL =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:8888"
-    : "https://quickhire-green.vercel.app";
+// const API_URL =
+//   process.env.NODE_ENV === "development"
+//     ? "http://localhost:8888"
+//     : "https://quickhire-green.vercel.app";
+
+const API_URL = "https://quickhire-green.vercel.app";
 
 export const fetchJobs = async (params = {}) => {
   const cleanParams = Object.fromEntries(
