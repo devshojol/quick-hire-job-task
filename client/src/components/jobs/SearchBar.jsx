@@ -1,10 +1,7 @@
 "use client";
 
-import {
-  HiOutlineMagnifyingGlass,
-  HiOutlineMapPin,
-  HiOutlineXMark,
-} from "react-icons/hi2";
+import { HiOutlineMagnifyingGlass, HiOutlineXMark } from "react-icons/hi2";
+import LocationSearch from "../common/LocationSearch";
 
 export default function SearchBar({
   search,
@@ -37,23 +34,12 @@ export default function SearchBar({
         )}
       </div>
 
-      <div className="flex items-center gap-3 flex-1 border-b sm:border-b-0 sm:border-r border-[#D6DDEB] pb-3 sm:pb-0 sm:pr-4">
-        <HiOutlineMapPin className="text-gray-400 shrink-0" size={20} />
-        <input
-          type="text"
-          placeholder="Location..."
+      <div className="flex-1 border-b sm:border-b-0 sm:border-r border-[#D6DDEB] pb-3 sm:pb-0 sm:pr-4">
+        <LocationSearch
           value={location}
-          onChange={(e) => onLocationChange(e.target.value)}
-          className="flex-1 focus:outline-none text-sm text-[#25324B] placeholder-gray-400 min-w-0"
+          onChange={onLocationChange}
+          inputClassName="flex-1 focus:outline-none text-sm text-[#25324B] placeholder-gray-400 min-w-0 w-full pr-6"
         />
-        {location && (
-          <button
-            onClick={() => onLocationChange("")}
-            className="text-gray-400 hover:text-gray-600 shrink-0"
-          >
-            <HiOutlineXMark size={16} />
-          </button>
-        )}
       </div>
 
       <button

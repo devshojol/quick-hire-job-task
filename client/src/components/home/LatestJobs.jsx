@@ -14,21 +14,9 @@ const JOB_TYPE_COLORS = {
   Internship: { bg: "#EBEBFF", text: "#4640DE" },
 };
 
-const LOGO_COLORS = [
-  "#4640DE",
-  "#26A4FF",
-  "#FF6550",
-  "#0BA02C",
-  "#FFB836",
-  "#7A0ECC",
-  "#E05151",
-  "#47C1BF",
-];
-
 const getInitials = (name = "") => name.slice(0, 2).toUpperCase();
 
-const LatestJobItem = ({ job, index }) => {
-  const color = LOGO_COLORS[index % LOGO_COLORS.length];
+const LatestJobItem = ({ job }) => {
   const typeColor = JOB_TYPE_COLORS[job.jobType] || {
     bg: "#E8F9F2",
     text: "#0BA02C",
@@ -39,10 +27,7 @@ const LatestJobItem = ({ job, index }) => {
       href={`/jobs/${job._id}`}
       className="flex items-start gap-4 p-4 border border-[#D6DDEB] hover:border-primary hover:shadow-sm transition-all duration-200 bg-white group"
     >
-      <div
-        className="w-12 h-12 rounded flex-shrink-0 flex items-center justify-center text-white font-bold text-sm overflow-hidden"
-        style={{ backgroundColor: job.companyLogo ? "transparent" : color }}
-      >
+      <div className="w-12 h-12 rounded shrink-0 flex items-center justify-center bg-[#F0F1F3] text-[#515B6F] font-bold text-sm overflow-hidden">
         {job.companyLogo ? (
           <Image
             src={job.companyLogo}
@@ -98,10 +83,6 @@ const LatestJobs = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  const midpoint = Math.ceil(jobs.length / 2);
-  const col1 = jobs.slice(0, midpoint);
-  const col2 = jobs.slice(midpoint);
-
   return (
     <section className="py-12 md:py-16 container mx-auto px-4">
       <div className="flex items-center justify-between mb-8">
@@ -117,7 +98,7 @@ const LatestJobs = () => {
       </div>
 
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
@@ -132,17 +113,10 @@ const LatestJobs = () => {
           ))}
         </div>
       ) : jobs.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="flex flex-col gap-4">
-            {col1.map((job, i) => (
-              <LatestJobItem key={job._id} job={job} index={i} />
-            ))}
-          </div>
-          <div className="flex flex-col gap-4">
-            {col2.map((job, i) => (
-              <LatestJobItem key={job._id} job={job} index={i + midpoint} />
-            ))}
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {jobs.map((job) => (
+            <LatestJobItem key={job._id} job={job} />
+          ))}
         </div>
       ) : (
         <div className="text-center py-8 border border-dashed border-[#D6DDEB] bg-white">

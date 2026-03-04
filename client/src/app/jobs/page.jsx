@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Footer from "../../components/common/Footer";
 import Navbar from "../../components/common/Navbar";
 import ActiveFilters from "../../components/jobs/ActiveFilters";
@@ -8,8 +8,12 @@ import FilterSidebar from "../../components/jobs/FilterSidebar";
 import JobsGrid from "../../components/jobs/JobsGrid";
 import JobsHeader from "../../components/jobs/JobsHeader";
 import MobileFilters from "../../components/jobs/MobileFilters";
+import Pagination from "../../components/jobs/Pagination";
 import SearchBar from "../../components/jobs/SearchBar";
+import { useDebounce } from "../../hooks/useDebounce";
 import { fetchJobs } from "../../lib/api";
+
+const JOBS_PER_PAGE = 9;
 
 const CATEGORIES = [
   "Design",
@@ -42,9 +46,6 @@ const LOGO_COLORS = [
   "#47C1BF",
 ];
 
-const hasActiveFilters = (category, jobType, location, search) =>
-  !!(category || jobType || location || search);
-
 export default function JobsPage() {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -53,18 +54,48 @@ export default function JobsPage() {
   const [jobType, setJobType] = useState("");
   const [location, setLocation] = useState("");
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [page, setPage] = useState(1);
+
+  const debouncedSearch = useDebounce(search, 500);
+  const debouncedLocation = useDebounce(location, 500);
+
+  const hasActiveFilters = useMemo(
+    () => !!(category || jobType || location || search),
+    [category, jobType, location, search],
+  );
+
+  const activeFilterCount = useMemo(
+    () => [category, jobType, location, search].filter(Boolean).length,
+    [category, jobType, location, search],
+  );
+
+  const totalPages = useMemo(
+    () => Math.ceil(jobs.length / JOBS_PER_PAGE),
+    [jobs.length],
+  );
+
+  const paginatedJobs = useMemo(
+    () => jobs.slice((page - 1) * JOBS_PER_PAGE, page * JOBS_PER_PAGE),
+    [jobs, page],
+  );
 
   const loadJobs = useCallback(async () => {
     setLoading(true);
+    setPage(1);
     try {
-      const data = await fetchJobs({ search, category, location, jobType });
+      const data = await fetchJobs({
+        search: debouncedSearch,
+        category,
+        location: debouncedLocation,
+        jobType,
+      });
       setJobs(data?.data || []);
     } catch {
       setJobs([]);
     } finally {
       setLoading(false);
     }
-  }, [search, category, location, jobType]);
+  }, [debouncedSearch, category, debouncedLocation, jobType]);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -79,8 +110,7 @@ export default function JobsPage() {
   }, []);
 
   useEffect(() => {
-    const timeout = setTimeout(loadJobs, 350);
-    return () => clearTimeout(timeout);
+    loadJobs();
   }, [loadJobs]);
 
   const clearAll = () => {
@@ -89,10 +119,6 @@ export default function JobsPage() {
     setLocation("");
     setSearch("");
   };
-
-  const activeFilterCount = [category, jobType, location, search].filter(
-    Boolean,
-  ).length;
 
   return (
     <div className="min-h-screen bg-[#F8F8FD]">
@@ -123,12 +149,7 @@ export default function JobsPage() {
           onApply={() => setMobileFilterOpen(false)}
           onClearAll={clearAll}
           activeFilterCount={activeFilterCount}
-          hasActiveFilters={hasActiveFilters(
-            category,
-            jobType,
-            location,
-            search,
-          )}
+          hasActiveFilters={hasActiveFilters}
         />
 
         <ActiveFilters
@@ -140,12 +161,7 @@ export default function JobsPage() {
           onJobTypeRemove={() => setJobType("")}
           onLocationRemove={() => setLocation("")}
           onSearchRemove={() => setSearch("")}
-          hasActiveFilters={hasActiveFilters(
-            category,
-            jobType,
-            location,
-            search,
-          )}
+          hasActiveFilters={hasActiveFilters}
         />
 
         <div className="flex gap-6">
@@ -158,28 +174,23 @@ export default function JobsPage() {
               onCategoryChange={setCategory}
               onJobTypeChange={setJobType}
               onClearAll={clearAll}
-              hasActiveFilters={hasActiveFilters(
-                category,
-                jobType,
-                location,
-                search,
-              )}
+              hasActiveFilters={hasActiveFilters}
             />
           </aside>
 
           <div className="flex-1 min-w-0">
             <JobsGrid
-              jobs={jobs}
+              jobs={paginatedJobs}
               loading={loading}
               logoColors={LOGO_COLORS}
               jobTypeColors={JOB_TYPE_COLORS}
               onClearAll={clearAll}
-              hasActiveFilters={hasActiveFilters(
-                category,
-                jobType,
-                location,
-                search,
-              )}
+              hasActiveFilters={hasActiveFilters}
+            />
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
             />
           </div>
         </div>

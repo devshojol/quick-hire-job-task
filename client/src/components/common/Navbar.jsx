@@ -13,7 +13,7 @@ const Navbar = () => {
           </Link>
           <div className="hidden md:flex items-center gap-5">
             <Link href="/jobs">Find Jobs</Link>
-            <Link href="/companies">Browse Companies</Link>
+            <Link href="/login">Browse Companies</Link>
           </div>
         </div>
 
@@ -23,7 +23,7 @@ const Navbar = () => {
           </Link>
           <div className="bg-secondary self-stretch w-px" />
           <Link
-            href="/signup"
+            href="/login"
             className="px-6 py-3 bg-primary text-white hover:bg-indigo-700 transition-colors font-bold"
           >
             Sign Up
